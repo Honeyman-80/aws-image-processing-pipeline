@@ -17,6 +17,23 @@ Resources:
       RedrivePolicy:
         deadLetterTargetArn: !GetAtt ImageProcessingDLQ.Arn
         maxReceiveCount: 3
+    ImageProcessingQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      Queues:
+        - !Ref ImageProcessingQueue
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: AllowS3SendMessage
+            Effect: Allow
+            Principal:
+              Service: s3.amazonaws.com
+            Action: sqs:SendMessage
+            Resource: !GetAtt ImageProcessingQueue.Arn
+            Condition:
+              ArnLike:
+                aws:SourceArn: !GetAtt ImageProcessingBucket.Arn
 
   ImageProcessingDLQ:
     Type: AWS::SQS::Queue
