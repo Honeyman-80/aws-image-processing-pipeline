@@ -17,7 +17,8 @@ Resources:
       RedrivePolicy:
         deadLetterTargetArn: !GetAtt ImageProcessingDLQ.Arn
         maxReceiveCount: 3
-    ImageProcessingQueuePolicy:
+  
+  ImageProcessingQueuePolicy:
     Type: AWS::SQS::QueuePolicy
     Properties:
       Queues:
