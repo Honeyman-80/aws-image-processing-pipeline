@@ -32,3 +32,6 @@ Resources:
       CodeUri: ../../src/process_image/
       MemorySize: 128
       Timeout: 10
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ImageProcessingRecordsTable
