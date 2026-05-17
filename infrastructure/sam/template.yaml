@@ -53,7 +53,7 @@ Resources:
   ImageProcessingFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: dave-image-processing-function
+      FunctionName: dave-image-processing-sam-function
       Runtime: python3.13
       Handler: app.lambda_handler
       CodeUri: ../../src/process_image/
