@@ -5,6 +5,11 @@ Description: Image processing pipeline using S3, SQS, Lambda, DynamoDB, and DLQ
 Resources:
   ImageProcessingBucket:
     Type: AWS::S3::Bucket
+    Properties:
+      NotificationConfiguration:
+        QueueConfigurations:
+          - Event: s3:ObjectCreated:*
+            Queue: !GetAtt ImageProcessingQueue.Arn  
 
   ImageProcessingQueue:
     Type: AWS::SQS::Queue
