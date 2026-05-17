@@ -8,6 +8,10 @@ Resources:
 
   ImageProcessingQueue:
     Type: AWS::SQS::Queue
+    Properties:
+      RedrivePolicy:
+        deadLetterTargetArn: !GetAtt ImageProcessingDLQ.Arn
+        maxReceiveCount: 3
 
   ImageProcessingDLQ:
     Type: AWS::SQS::Queue
@@ -35,3 +39,9 @@ Resources:
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref ImageProcessingRecordsTable
+      Events:
+        QueueEvent:
+          Type: SQS
+          Properties:
+            Queue: !GetAtt ImageProcessingQueue.Arn
+            BatchSize: 1         
