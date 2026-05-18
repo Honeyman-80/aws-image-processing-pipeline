@@ -56,6 +56,9 @@ Resources:
       ClientName: !Sub "${ProjectName}-client"
       UserPoolId: !Ref ImageProcessingUserPool
       GenerateSecret: false
+      ExplicitAuthFlows:
+        - ALLOW_USER_PASSWORD_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
 
   ImageProcessingApi:
     Type: AWS::Serverless::Api
