@@ -106,3 +106,35 @@ Working pipeline:
 S3 → SQS → Lambda → S3 GetObject → DynamoDB
 
 DLQ failure and recovery flow tested successfully.
+
+## SAM Conversion
+
+Converted manual image-processing pipeline into AWS SAM.
+
+SAM now deploys:
+
+- S3 bucket
+- SQS main queue
+- SQS DLQ
+- Lambda function
+- DynamoDB table
+- IAM policies
+- SQS event source mapping
+
+Tested SAM deployment successfully.
+
+## Bug Fixed
+
+Initial SAM test failed because Lambda code still referenced the old manual DynamoDB table:
+
+dave-image-processing-records
+
+SAM IAM permissions were for:
+
+dave-image-processing-sam-records
+
+Fixed app.py to write to the SAM-created table.
+
+Lesson learned:
+
+When moving from manual resources to IaC resources, code must point to the new IaC-created resource names.
