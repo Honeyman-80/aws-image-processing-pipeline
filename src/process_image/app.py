@@ -1,11 +1,13 @@
 import json
 import boto3
 import uuid
+import os
 from datetime import datetime, timezone
 
 s3_client = boto3.client("s3")
 dynamodb = boto3.resource("dynamodb")
-table = dynamodb.Table("dave-image-processing-sam-records")
+table_name = os.environ["TABLE_NAME"]
+table = dynamodb.Table(table_name)
 
 def lambda_handler(event, context):
     print("Lambda was triggered")
