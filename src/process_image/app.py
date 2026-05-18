@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 
 s3_client = boto3.client("s3")
 dynamodb = boto3.resource("dynamodb")
-table = dynamodb.Table("dave-image-processing-records")
+table = dynamodb.Table("dave-image-processing-sam-records")
 
 def lambda_handler(event, context):
     print("Lambda was triggered")
