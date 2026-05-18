@@ -44,6 +44,29 @@ Resources:
     Type: AWS::SQS::Queue
     Properties:
       QueueName: !Sub "${ProjectName}-dlq"
+  
+  ImageProcessingUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: !Sub "${ProjectName}-users"
+
+  ImageProcessingUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: !Sub "${ProjectName}-client"
+      UserPoolId: !Ref ImageProcessingUserPool
+      GenerateSecret: false
+
+  ImageProcessingApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub "${ProjectName}-api"
+      StageName: Prod
+      Auth:
+        DefaultAuthorizer: CognitoAuthorizer
+        Authorizers:
+          CognitoAuthorizer:
+            UserPoolArn: !GetAtt ImageProcessingUserPool.Arn
 
   ImageProcessingRecordsTable:
     Type: AWS::DynamoDB::Table
@@ -104,5 +127,6 @@ Resources:
         GetRecordsApi:
           Type: Api
           Properties:
+            RestApiId: !Ref ImageProcessingApi
             Path: /records
             Method: GET
