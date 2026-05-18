@@ -3,6 +3,7 @@ import os
 from decimal import Decimal
 
 import boto3
+from boto3.dynamodb.conditions import Key
 
 dynamodb = boto3.resource("dynamodb")
 table_name = os.environ["TABLE_NAME"]
@@ -14,7 +15,9 @@ def decimal_default(value):
     raise TypeError
 
 def lambda_handler(event, context):
-    result = table.scan()
+    user_id = event["requestContext"]["authorizer"]["claims"]["sub"]
+    result = table.query(
+    KeyConditionExpression=Key("user_id").eq(user_id)
 
     return {
         "statusCode": 200,
