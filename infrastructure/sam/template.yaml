@@ -60,6 +60,9 @@ Resources:
       CodeUri: ../../src/process_image/
       MemorySize: 128
       Timeout: 10
+      Environment:
+        Variables:
+          TABLE_NAME: dave-image-processing-sam-records
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref ImageProcessingRecordsTable
