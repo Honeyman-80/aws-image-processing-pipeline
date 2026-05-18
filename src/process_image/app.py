@@ -29,6 +29,7 @@ def lambda_handler(event, context):
             content_type = response.get("ContentType", "unknown")
 
             item = {
+                "user_id": "demo-user",
                 "image_id": str(uuid.uuid4()),
                 "bucket": bucket,
                 "object_key": key,
