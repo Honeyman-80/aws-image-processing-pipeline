@@ -2,6 +2,12 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: Image processing pipeline using S3, SQS, Lambda, DynamoDB, and DLQ
 
+Parameters:
+  ProjectName:
+    Type: String
+    Default: dave-image-processing-sam
+    Description: Base name used for image processing resources
+
 Resources:
   ImageProcessingBucket:
     Type: AWS::S3::Bucket
