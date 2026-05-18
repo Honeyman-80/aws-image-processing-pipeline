@@ -17,7 +17,7 @@ Resources:
   ImageProcessingQueue:
     Type: AWS::SQS::Queue
     Properties:
-      QueueName: dave-image-processing-sam-queue
+      QueueName: !Sub "${ProjectName}-queue"
       RedrivePolicy:
         deadLetterTargetArn: !GetAtt ImageProcessingDLQ.Arn
         maxReceiveCount: 3
@@ -43,12 +43,12 @@ Resources:
   ImageProcessingDLQ:
     Type: AWS::SQS::Queue
     Properties:
-      QueueName: dave-image-processing-sam-dlq
+      QueueName: !Sub "${ProjectName}-dlq"
 
   ImageProcessingRecordsTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: dave-image-processing-sam-records
+      TableName: !Sub "${ProjectName}-records"
       BillingMode: PAY_PER_REQUEST
       AttributeDefinitions:
         - AttributeName: image_id
@@ -60,7 +60,7 @@ Resources:
   ImageProcessingFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: dave-image-processing-sam-function
+      FunctionName: !Sub "${ProjectName}-function"
       Runtime: python3.13
       Handler: app.lambda_handler
       CodeUri: ../../src/process_image/
@@ -68,7 +68,7 @@ Resources:
       Timeout: 10
       Environment:
         Variables:
-          TABLE_NAME: dave-image-processing-sam-records
+          TABLE_NAME: !Sub "${ProjectName}-records"
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref ImageProcessingRecordsTable
