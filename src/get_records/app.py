@@ -16,8 +16,10 @@ def decimal_default(value):
 
 def lambda_handler(event, context):
     user_id = event["requestContext"]["authorizer"]["claims"]["sub"]
+
     result = table.query(
-    KeyConditionExpression=Key("user_id").eq(user_id)
+        KeyConditionExpression=Key("user_id").eq(user_id)
+    )
 
     return {
         "statusCode": 200,
