@@ -48,7 +48,7 @@ Resources:
   ImageProcessingRecordsTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: !Sub "${ProjectName}-records"
+      TableName: !Sub "${ProjectName}-records-v2"
       BillingMode: PAY_PER_REQUEST
       AttributeDefinitions:
         - AttributeName: user_id
@@ -96,10 +96,10 @@ Resources:
       Timeout: 10
       Environment:
         Variables:
-          TABLE_NAME: !Sub "${ProjectName}-records"
+          TABLE_NAME: !Sub "${ProjectName}-records-v2"
       Policies:
         - DynamoDBReadPolicy:
-            TableName: !Sub "${ProjectName}-records"
+            TableName: !Sub "${ProjectName}-records-v2"
       Events:
         GetRecordsApi:
           Type: Api
