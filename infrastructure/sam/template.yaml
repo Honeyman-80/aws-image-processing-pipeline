@@ -72,7 +72,7 @@ Resources:
       Timeout: 10
       Environment:
         Variables:
-          TABLE_NAME: !Sub "${ProjectName}-records"
+          TABLE_NAME: !Sub "${ProjectName}-records-v2"
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref ImageProcessingRecordsTable
