@@ -5,14 +5,8 @@ Description: Image processing pipeline using S3, SQS, Lambda, DynamoDB, and DLQ
 Resources:
   ImageProcessingBucket:
     Type: AWS::S3::Bucket
-    DependsOn:
-      - ImageProcessingQueuePolicy
     Properties:
-      BucketName: dave-image-processing-sam-2026
-      NotificationConfiguration:
-        QueueConfigurations:
-          - Event: s3:ObjectCreated:*
-            Queue: !GetAtt ImageProcessingQueue.Arn  
+      BucketName: dave-image-processing-sam-2026 
 
   ImageProcessingQueue:
     Type: AWS::SQS::Queue
