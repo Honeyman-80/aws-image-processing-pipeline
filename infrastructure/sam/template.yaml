@@ -79,4 +79,26 @@ Resources:
           Type: SQS
           Properties:
             Queue: !GetAtt ImageProcessingQueue.Arn
-            BatchSize: 1         
+            BatchSize: 1 
+
+  GetRecordsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${ProjectName}-get-records-function"
+      Runtime: python3.13
+      Handler: app.lambda_handler
+      CodeUri: ../../src/get_records/
+      MemorySize: 128
+      Timeout: 10
+      Environment:
+        Variables:
+          TABLE_NAME: !Sub "${ProjectName}-records"
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Sub "${ProjectName}-records"
+      Events:
+        GetRecordsApi:
+          Type: Api
+          Properties:
+            Path: /records
+            Method: GET
