@@ -138,7 +138,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: dave-image-processing-sam-get-upload-url-function
-      CodeUri: src/get_upload_url/
+      CodeUri: ../../src/get_upload_url/
       Handler: app.lambda_handler
       Runtime: python3.13
 
