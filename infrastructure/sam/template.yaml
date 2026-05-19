@@ -133,3 +133,29 @@ Resources:
             RestApiId: !Ref ImageProcessingApi
             Path: /records
             Method: GET
+
+  GetUploadUrlFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: dave-image-processing-sam-get-upload-url-function
+      CodeUri: src/get_upload_url/
+      Handler: app.lambda_handler
+      Runtime: python3.13
+
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref ImageProcessingBucket
+
+      Policies:
+        - S3WritePolicy:
+            BucketName: !Ref ImageProcessingBucket
+
+      Events:
+        GetUploadUrl:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ImageApi
+            Path: /upload-url
+            Method: POST
+            Auth:
+              Authorizer: CognitoAuthorizer
