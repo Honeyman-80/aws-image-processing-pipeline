@@ -154,7 +154,7 @@ Resources:
         GetUploadUrl:
           Type: Api
           Properties:
-            RestApiId: !Ref ImageApi
+            RestApiId: !Ref ImageProcessingApi
             Path: /upload-url
             Method: POST
             Auth:
