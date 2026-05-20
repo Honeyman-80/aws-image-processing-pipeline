@@ -28,8 +28,12 @@ def lambda_handler(event, context):
 
             content_type = response.get("ContentType", "unknown")
 
+            key_parts = key.split("/")
+
+            user_id = key_parts[1]
+            
             item = {
-                "user_id": "demo-user",
+                "user_id": user_id,
                 "image_id": str(uuid.uuid4()),
                 "bucket": bucket,
                 "object_key": key,
