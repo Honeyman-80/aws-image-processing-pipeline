@@ -34,7 +34,7 @@ def lambda_handler(event, context):
             
             item = {
                 "user_id": user_id,
-                "image_id": str(uuid.uuid4()),
+                "image_id": key_parts[2].replace(".jpg", ""),
                 "bucket": bucket,
                 "object_key": key,
                 "size": size,
