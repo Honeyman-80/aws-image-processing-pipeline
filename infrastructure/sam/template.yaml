@@ -145,10 +145,14 @@ Resources:
       Environment:
         Variables:
           BUCKET_NAME: !Ref ImageProcessingBucket
+          TABLE_NAME: !Ref ImageProcessingRecordsTable
 
       Policies:
         - S3WritePolicy:
             BucketName: !Ref ImageProcessingBucket
+        
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ImageProcessingRecordsTable
 
       Events:
         GetUploadUrl:
