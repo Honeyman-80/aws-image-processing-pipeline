@@ -32,18 +32,35 @@ def lambda_handler(event, context):
 
             user_id = key_parts[1]
             
-            item = {
-                "user_id": user_id,
-                "image_id": key_parts[2].replace(".jpg", ""),
-                "bucket": bucket,
-                "object_key": key,
-                "size": size,
-                "content_type": content_type,
-                "event_name": event_name,
-                "processed_at": datetime.now(timezone.utc).isoformat()
-            }
+            image_id = key_parts[2].replace(".jpg", "")
 
-            table.put_item(Item=item)
+            table.update_item(
+                Key={
+                    "user_id": user_id,
+                    "image_id": image_id
+                },
+                UpdateExpression="""
+                    SET #status = :status,
+                        bucket = :bucket,
+                        object_key = :object_key,
+                        size = :size,
+                        content_type = :content_type,
+                        event_name = :event_name,
+                        processed_at = :processed_at
+                """,
+                ExpressionAttributeNames={
+                    "#status": "status"
+                },
+                ExpressionAttributeValues={
+                    ":status": "COMPLETED",
+                    ":bucket": bucket,
+                    ":object_key": key,
+                    ":size": size,
+                    ":content_type": content_type,
+                    ":event_name": event_name,
+                    ":processed_at": datetime.now(timezone.utc).isoformat()
+                }
+            )
 
             print("Image record saved")
             print(json.dumps(item))
