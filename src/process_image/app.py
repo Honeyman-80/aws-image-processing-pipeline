@@ -1,6 +1,5 @@
 import json
 import boto3
-import uuid
 import os
 from datetime import datetime, timezone
 
@@ -23,7 +22,7 @@ def lambda_handler(event, context):
             event_name = s3_record["eventName"]
 
             response = s3_client.get_object(
-                bucket: bucket
+                Bucket=bucket,
                 Key=key
             )
 
@@ -40,7 +39,7 @@ def lambda_handler(event, context):
                 },
                 UpdateExpression="""
                     SET #status = :status,
-                        bucket = :bucket,
+                        #bucket = :bucket,
                         object_key = :object_key,
                         size = :size,
                         content_type = :content_type,
@@ -51,7 +50,6 @@ def lambda_handler(event, context):
                     "#status": "status",
                     "#bucket": "bucket"
                 },
-                
                 ExpressionAttributeValues={
                     ":status": "COMPLETED",
                     ":bucket": bucket,
@@ -63,10 +61,9 @@ def lambda_handler(event, context):
                 }
             )
 
-            print("Image record saved")
+            print("Image record updated to COMPLETED")
 
     return {
         "statusCode": 200,
         "body": "Processed image upload"
     }
-    
