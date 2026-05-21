@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 
 s3_client = boto3.client("s3")
 dynamodb = boto3.resource("dynamodb")
+
 table_name = os.environ["TABLE_NAME"]
 table = dynamodb.Table(table_name)
 
@@ -22,16 +23,14 @@ def lambda_handler(event, context):
             event_name = s3_record["eventName"]
 
             response = s3_client.get_object(
-                #bucket": "bucket"
+                bucket: bucket
                 Key=key
             )
 
             content_type = response.get("ContentType", "unknown")
 
             key_parts = key.split("/")
-
             user_id = key_parts[1]
-            
             image_id = key_parts[2].replace(".jpg", "")
 
             table.update_item(
@@ -65,7 +64,6 @@ def lambda_handler(event, context):
             )
 
             print("Image record saved")
-            print(json.dumps(item))
 
     return {
         "statusCode": 200,
