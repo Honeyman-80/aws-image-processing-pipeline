@@ -22,7 +22,7 @@ def lambda_handler(event, context):
             event_name = s3_record["eventName"]
 
             response = s3_client.get_object(
-                Bucket=bucket,
+                #bucket": "bucket"
                 Key=key
             )
 
@@ -49,7 +49,9 @@ def lambda_handler(event, context):
                         processed_at = :processed_at
                 """,
                 ExpressionAttributeNames={
-                    "#status": "status"
+                    "#status": "status",
+                    "#bucket": "bucket"
+                },
                 },
                 ExpressionAttributeValues={
                     ":status": "COMPLETED",
