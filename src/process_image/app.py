@@ -51,7 +51,7 @@ def lambda_handler(event, context):
                     "#status": "status",
                     "#bucket": "bucket"
                 },
-                },
+                
                 ExpressionAttributeValues={
                     ":status": "COMPLETED",
                     ":bucket": bucket,
