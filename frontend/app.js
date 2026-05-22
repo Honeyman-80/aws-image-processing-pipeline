@@ -80,8 +80,12 @@ async function loadRecords() {
     for (const record of data.records) {
       const li = document.createElement("li");
 
-      li.textContent =
-        `${record.image_id} - ${record.status}`;
+      li.innerHTML = `
+        <strong>Status:</strong> ${record.status}<br>
+        <strong>Image ID:</strong> ${record.image_id}<br>
+        <strong>Created:</strong> ${record.created_at}<br>
+        <strong>Processed:</strong> ${record.processed_at || "Not processed yet"}
+      `;
 
       recordsList.appendChild(li);
     }
