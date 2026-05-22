@@ -21,12 +21,19 @@ def lambda_handler(event, context):
         KeyConditionExpression=Key("user_id").eq(user_id)
     )
 
+    records = result.get("Items", [])
+
+    records.sort(
+        key=lambda record: record.get("created_at", ""),
+        reverse=True
+    )
+
     return {
         "statusCode": 200,
         "headers": {
             "Content-Type": "application/json"
         },
         "body": json.dumps({
-            "records": result.get("Items", [])
+            "records": records
         }, default=decimal_default)
     }
