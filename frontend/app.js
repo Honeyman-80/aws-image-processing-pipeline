@@ -76,6 +76,16 @@ async function loadRecords() {
     console.log("Records response:", data);
 
     recordsStatus.textContent = `Loaded ${data.records.length} records`;
+
+    for (const record of data.records) {
+      const li = document.createElement("li");
+
+      li.textContent =
+        `${record.image_id} - ${record.status}`;
+
+      recordsList.appendChild(li);
+    }
+
   } catch (error) {
     console.error("Failed to load records:", error);
 
