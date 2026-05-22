@@ -6,8 +6,12 @@ const REDIRECT_URI = "https://dchdkjcdj76c0.cloudfront.net";
 
 const loginButton = document.getElementById("login-btn");
 const loadRecordsButton = document.getElementById("load-records-btn");
+const uploadButton = document.getElementById("upload-btn");
+
 const recordsStatus = document.getElementById("records-status");
 const recordsList = document.getElementById("records-list");
+
+const fileInput = document.getElementById("file-input");
 
 function login() {
   const loginUrl =
@@ -22,6 +26,7 @@ function login() {
 
 async function exchangeCodeForToken() {
   const params = new URLSearchParams(window.location.search);
+
   const code = params.get("code");
 
   if (!code) {
@@ -58,6 +63,7 @@ async function exchangeCodeForToken() {
 
 async function loadRecords() {
   recordsStatus.textContent = "Loading records...";
+
   recordsList.innerHTML = "";
 
   const token = localStorage.getItem("id_token");
@@ -75,7 +81,8 @@ async function loadRecords() {
 
     console.log("Records response:", data);
 
-    recordsStatus.textContent = `Loaded ${data.records.length} records`;
+    recordsStatus.textContent =
+      `Loaded ${data.records.length} records`;
 
     for (const record of data.records) {
       const li = document.createElement("li");
@@ -93,11 +100,36 @@ async function loadRecords() {
   } catch (error) {
     console.error("Failed to load records:", error);
 
-    recordsStatus.textContent = "Failed to load records";
+    recordsStatus.textContent =
+      "Failed to load records";
   }
 }
 
+async function uploadImage() {
+  const file = fileInput.files[0];
+
+  if (!file) {
+    alert("Please select a file");
+
+    return;
+  }
+
+  console.log("Selected file:", file.name);
+
+  recordsStatus.textContent =
+    `Selected file: ${file.name}`;
+}
+
 loginButton.addEventListener("click", login);
-loadRecordsButton.addEventListener("click", loadRecords);
+
+loadRecordsButton.addEventListener(
+  "click",
+  loadRecords
+);
+
+uploadButton.addEventListener(
+  "click",
+  uploadImage
+);
 
 exchangeCodeForToken();
