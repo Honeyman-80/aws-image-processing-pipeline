@@ -114,10 +114,55 @@ async function uploadImage() {
     return;
   }
 
-  console.log("Selected file:", file.name);
-
   recordsStatus.textContent =
-    `Selected file: ${file.name}`;
+    "Requesting upload URL...";
+
+  const token = localStorage.getItem("id_token");
+
+  try {
+
+    const uploadUrlResponse = await fetch(
+      `${API_BASE_URL}/upload-url`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    const uploadData =
+      await uploadUrlResponse.json();
+
+    console.log(
+      "Upload URL response:",
+      uploadData
+    );
+
+    recordsStatus.textContent =
+      "Uploading image to S3...";
+
+    await fetch(uploadData.upload_url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "image/jpeg"
+      },
+      body: file
+    });
+
+    recordsStatus.textContent =
+      "Upload complete";
+
+  } catch (error) {
+
+    console.error(
+      "Upload failed:",
+      error
+    );
+
+    recordsStatus.textContent =
+      "Upload failed";
+  }
 }
 
 loginButton.addEventListener("click", login);
