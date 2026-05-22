@@ -39,6 +39,24 @@ def lambda_handler(event, context):
                 },
                 UpdateExpression="""
                     SET #status = :status,
+                        processing_started_at = :processing_started_at
+                """,
+                ExpressionAttributeNames={
+                    "#status": "status"
+                },
+                ExpressionAttributeValues={
+                    ":status": "PROCESSING",
+                    ":processing_started_at": datetime.now(timezone.utc).isoformat()
+                }
+            )
+
+            table.update_item(
+                Key={
+                    "user_id": user_id,
+                    "image_id": image_id
+                },
+                UpdateExpression="""
+                    SET #status = :status,
                         #bucket = :bucket,
                         object_key = :object_key,
                         size = :size,
