@@ -20,12 +20,54 @@ function login() {
   window.location.href = loginUrl;
 }
 
+async function exchangeCodeForToken() {
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get("code");
+
+  if (!code) {
+    return;
+  }
+
+  recordsStatus.textContent = "Completing login...";
+
+  const tokenUrl = `${COGNITO_DOMAIN}/oauth2/token`;
+
+  const body = new URLSearchParams({
+    grant_type: "authorization_code",
+    client_id: CLIENT_ID,
+    code: code,
+    redirect_uri: REDIRECT_URI
+  });
+
+  const response = await fetch(tokenUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: body
+  });
+
+  const data = await response.json();
+
+  localStorage.setItem("id_token", data.id_token);
+
+  recordsStatus.textContent = "Logged in successfully";
+
+  window.history.replaceState({}, document.title, REDIRECT_URI);
+}
+
 async function loadRecords() {
   recordsStatus.textContent = "Loading records...";
   recordsList.innerHTML = "";
 
+  const token = localStorage.getItem("id_token");
+
   try {
-    const response = await fetch(`${API_BASE_URL}/records`);
+    const response = await fetch(`${API_BASE_URL}/records`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
 
     console.log("Response status:", response.status);
 
@@ -43,3 +85,5 @@ async function loadRecords() {
 
 loginButton.addEventListener("click", login);
 loadRecordsButton.addEventListener("click", loadRecords);
+
+exchangeCodeForToken();
