@@ -11,7 +11,7 @@ const recordsList = document.getElementById("records-list");
 
 function login() {
   const loginUrl =
-    `${COGNITO_DOMAIN}/login?` +
+    `${COGNITO_DOMAIN}/oauth2/authorize?` +
     `client_id=${CLIENT_ID}&` +
     `response_type=code&` +
     `scope=openid+email+profile&` +
